@@ -98,6 +98,14 @@ async function handler(ctx) {
 
                 item.description = parseContent(response);
 
+                // Match magnet links in description and assign the first one to enclosure_url
+                const magnetRegex = /magnet:\?[^"'\s<>&]*/g;
+                const magnetMatches = item.description.match(magnetRegex);
+                if (magnetMatches && magnetMatches.length > 0) {
+                    item.enclosure_url = magnetMatches[0];
+                    item.enclosure_type = 'application/x-bittorrent';
+                }
+
                 return item;
             })
         )

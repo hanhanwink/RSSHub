@@ -105,6 +105,9 @@ async function handler(ctx) {
                     item.enclosure_url = magnetMatches[0];
                     item.enclosure_type = 'application/x-bittorrent';
                 }
+                if (item.enclosure_url) {
+                    item.description += `<p><a href="${item.enclosure_url}">种子链接</a></p>`;
+                }
 
                 return item;
             })

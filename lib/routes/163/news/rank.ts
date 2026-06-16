@@ -152,8 +152,8 @@ async function handler(ctx) {
             cache.tryGet(item.link, async () => {
                 try {
                     let link;
-                    if (category === 'auto' || category === 'house' || category === 'travel') {
-                        const category = item.link.split('.163.com')[0].split('//').pop().split('.').pop();
+                    if (['auto', 'house', 'travel'].includes(category)) {
+                        const category = item.link.split('.163.com', 1)[0].split('//').pop().split('.').pop();
                         link = `https://3g.163.com/${category}/article/${item.link.split('/').pop()}`;
                     } else {
                         const pathname = new URL(item.link).pathname;
@@ -167,8 +167,8 @@ async function handler(ctx) {
                     const content = load(detailResponse.data);
 
                     content('.bot_word, .js-open-app, .s-img').remove();
-                    content('video').each(function () {
-                        content(this).attr('src', content(this).attr('data-src'));
+                    content('video').each((_, el) => {
+                        content(el).attr('src', content(el).attr('data-src'));
                     });
                     content('.article-body .image-lazy').each((_, elem) => {
                         elem.attribs.src = elem.attribs['data-src'] ?? elem.attribs.src;
